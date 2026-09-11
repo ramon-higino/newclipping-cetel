@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewClipping · CETEL · Guarda Civil Metropolitana de São Paulo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87.5,500;87.5,700;100,400;100,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ---------- identidade ----------
+   Marinho GCM, papel de ofício, carimbo vermelho, tinta grafite.
+   Sem gradiente, sem sombra, sem canto arredondado além de 2px.  */
+:root{
+  --marinho:#0e2340; --marinho-2:#173a66; --papel:#f5f2ec; --papel-2:#ece7dc; --linha:#cfc8ba;
+  --tinta:#1d1d1b; --tinta-2:#5a5750; --carimbo:#a3272a; --verde:#2f6b3a; --ocre:#b8860b;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--papel)}
+body{margin:0;font-family:var(--sans);font-size:14.5px;line-height:1.45;color:var(--tinta);background:var(--papel)}
+/* ---------- cabeçalho ---------- */
+.masthead{background:var(--marinho);color:#fff;border-bottom:6px solid var(--carimbo)}
+.masthead .in{max-width:1360px;margin:0 auto;padding:18px 28px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.brasao{display:flex;align-items:center;gap:14px}
+.brasao .marca{width:46px;height:46px;border:2px solid #fff;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:15px;letter-spacing:.04em}
+.brasao .org{font-family:var(--sans);font-stretch:87.5%;text-transform:uppercase;letter-spacing:.12em;font-size:11px;line-height:1.35;opacity:.92}
+.brasao .org b{display:block;font-size:13px;letter-spacing:.14em;opacity:1}
+.titulo{text-align:right}
+.titulo h1{margin:0;font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:-.01em;line-height:1.1}
+.titulo small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:6px}
+/* ---------- faixa de instrução ---------- */
+.faixa{background:var(--papel-2);border-bottom:1px solid var(--linha)}
+.faixa .in{max-width:1360px;margin:0 auto;padding:9px 28px;display:flex;gap:28px;flex-wrap:wrap;font-size:13px;color:var(--tinta-2)}
+.faixa .in span b{color:var(--marinho);font-family:var(--mono);font-size:12px;margin-right:6px}
+/* ---------- grade ---------- */
+main{max-width:1360px;margin:0 auto;padding:22px 28px 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px}
+@media(min-width:961px){.folha.fixa{position:sticky;top:14px;align-self:start;max-height:calc(100vh - 28px);overflow:auto}}
+@media(max-width:960px){main{grid-template-columns:1fr}}
+.folha{background:#fff;border:1px solid var(--linha);border-top:3px solid var(--marinho)}
+.folha>h2{margin:0;padding:12px 18px;font-family:var(--sans);font-stretch:87.5%;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--marinho);border-bottom:1px solid var(--linha);display:flex;align-items:center;gap:10px}
+.folha>h2 .n{font-family:var(--mono);font-weight:600;color:var(--carimbo)}
+.folha .corpo{padding:14px 18px 18px}
+/* ---------- campos ---------- */
+label{display:block;margin:14px 0 4px;font-family:var(--sans);font-stretch:87.5%;font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--marinho)}
+label .opt{font-weight:500;letter-spacing:.02em;text-transform:none;color:var(--tinta-2)}
+input[type=text],select,textarea{width:100%;padding:8px 10px;border:1px solid var(--linha);border-radius:2px;background:#fff;font-family:var(--serif);font-size:15px;color:var(--tinta);transition:border-color .12s}
+input[type=text]:focus,select:focus,textarea:focus{outline:none;border-color:var(--marinho);box-shadow:inset 0 0 0 1px var(--marinho)}
+select{font-family:var(--sans);font-size:14px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--marinho) 50%),linear-gradient(135deg,var(--marinho) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+textarea{min-height:74px;resize:vertical;line-height:1.45}
+#relato{min-height:120px;font-size:14px;background:var(--papel)}
+.hint{font-size:12.5px;color:var(--tinta-2);margin-top:4px;line-height:1.4}
+.grupo{margin:22px 0 2px;padding-top:10px;border-top:1px dashed var(--linha)}
+.grupo h3{margin:0;font-family:var(--mono);font-weight:600;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--carimbo)}
+#modeloHint{margin-top:6px;padding:8px 10px;background:var(--papel);border-left:3px solid var(--marinho);font-size:13px;color:var(--tinta-2)}
+/* ---------- saída: reproduz a caixa do clipping ---------- */
+.doc{border:1px solid var(--tinta);margin-top:6px}
+.doc .cab{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--tinta);font-family:var(--sans);font-size:12px}
+.doc .cab div{padding:5px 10px}
+.doc .cab div+div{border-left:1px solid var(--tinta);font-family:var(--mono);color:var(--tinta-2)}
+.doc .cab b{font-weight:700}
+.doc .tit{text-align:center;font-weight:700;font-size:13px;padding:5px;border-bottom:1px solid var(--tinta);font-family:var(--sans)}
+#saida{white-space:pre-wrap;padding:14px 16px 18px;min-height:220px;font-family:var(--serif);font-size:15.5px;line-height:1.5;color:var(--tinta)}
+#saida:empty::before{content:"O histórico aparece aqui à medida que os campos são preenchidos.";color:var(--tinta-2);font-style:italic}
+.barra{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.btn{font-family:var(--sans);font-stretch:87.5%;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border:1px solid var(--marinho);background:var(--marinho);color:#fff;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--marinho-2)}
+.btn.sec{background:transparent;color:var(--marinho)}
+.btn.sec:hover{background:var(--papel)}
+.contador{font-family:var(--mono);font-size:11.5px;color:var(--tinta-2);margin-left:auto}
+#msg{font-family:var(--mono);font-size:12px}
+.ok{color:var(--verde);font-weight:600}
+/* ---------- avisos: selo/carimbo ---------- */
+.aviso{margin:0 0 12px;padding:10px 12px 10px 14px;border:1px solid var(--carimbo);border-left-width:6px;background:#fff;font-size:13px;color:var(--tinta)}
+.aviso b{font-family:var(--sans);font-stretch:87.5%;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--carimbo)}
+.aviso ul{margin:6px 0 0 18px;padding:0}
+.aviso.ok{border-color:var(--verde);color:var(--tinta);font-weight:400}
+.aviso.ok b{color:var(--verde)}
+/* ---------- checklist ---------- */
+details{margin-top:16px;border-top:1px solid var(--linha);padding-top:8px}
+summary{cursor:pointer;font-family:var(--sans);font-stretch:87.5%;font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--marinho);list-style:none;display:flex;align-items:center;gap:8px}
+summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--marinho);border-bottom:2px solid var(--marinho);transform:rotate(-45deg);transition:transform .15s}
+details[open] summary::before{transform:rotate(45deg)}
+.chk{margin:8px 0 0;padding:0 0 0 2px;list-style:none;font-size:13.5px}
+.chk li{position:relative;padding:5px 0 5px 22px;border-bottom:1px dotted var(--linha)}
+.chk li::before{content:"";position:absolute;left:0;top:8px;width:11px;height:11px;border:1.5px solid var(--marinho)}
+.rodape{max-width:1360px;margin:0 auto;padding:14px 28px 28px;font-family:var(--mono);font-size:11px;color:var(--tinta-2);border-top:1px solid var(--linha);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hidden{display:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.row{grid-template-columns:1fr}.masthead .in{padding:14px 16px}.titulo{text-align:left}main{padding:16px}.faixa .in{padding:9px 16px}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="in">
+    <div class="brasao">
+      <div class="marca" aria-hidden="true">GCM</div>
+      <div class="org"><b>Guarda Civil Metropolitana</b>Prefeitura de São Paulo · Secretaria Municipal de Segurança Urbana<br>CETEL – Central de Telecomunicações</div>
+    </div>
+    <div class="titulo">
+      <h1>Histórico da Ocorrência</h1>
+      <small>Sistema de Preenchimento NewClipping</small>
+    </div>
+  </div>
+</header>
+<div class="faixa"><div class="in">
+  <span><b>01</b>Cole o relato da equipe para consulta</span>
+  <span><b>02</b>Escolha o modelo pela natureza principal</span>
+  <span><b>03</b>Preencha os campos</span>
+  <span><b>04</b>Confira as lacunas e copie o histórico</span>
+</div></div>
+<main>
+  <section class="folha">
+    <h2><span class="n">01</span>Relato da equipe e modelo</h2>
+    <div class="corpo">
+      <label for="relato">Relato da equipe <span class="opt">— só para consulta; não entra no texto</span></label>
+      <textarea id="relato" placeholder="Cole aqui o relato bruto recebido da guarnição."></textarea>
+      <label for="modelo">Natureza principal / modelo</label>
+      <select id="modelo"></select>
+      <div id="modeloHint"></div>
+      <div id="form"></div>
+    </div>
+  </section>
+  <section class="folha fixa">
+    <h2><span class="n">02</span>Histórico pronto para o clipping</h2>
+    <div class="corpo">
+      <div class="barra">
+        <button class="btn" id="copiar" type="button">Copiar histórico</button>
+        <button class="btn sec" id="limpar" type="button">Limpar</button>
+        <span id="msg"></span>
+        <span class="contador" id="contador"></span>
+      </div>
+      <div id="avisos"></div>
+      <div class="doc">
+        <div class="cab"><div><b>Natureza:</b> <span id="docNat">—</span></div><div>CETEL · NewClipping</div></div>
+        <div class="tit">Histórico da Ocorrência</div>
+        <div id="saida"></div>
+      </div>
+      <details open><summary>Checklist deste modelo</summary><ul class="chk" id="checklist"></ul></details>
+      <details><summary>Regras que valem para todo histórico</summary>
+        <ul class="chk">
+          <li>O histórico organiza o relato da equipe; não cria nova versão dos fatos. Campo sem informação no relato fica em branco.</li>
+          <li>Nome completo e CPF formatado. Menores e vítimas de crime sexual: iniciais e idade.</li>
+          <li>Natureza do BO exatamente como consta do BO. Ofensas e ameaças entre aspas, como no relato.</li>
+          <li>Antes de fechar, consulte a equipe se faltar: destino de bens, nº do BO, natureza literal, decisão sobre a pessoa.</li>
+          <li>Data, horário e endereço ficam no cabeçalho do sistema; não repita no texto.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+</main>
+<footer class="rodape">
+  <span>Nenhum dado é salvo ou transmitido: ao fechar a página, tudo é apagado.</span>
+</footer>
+<script>
+// ===================== FÁBRICAS DE CAMPOS COMUNS =====================
+const F = {
+  acion: (extra=[]) => [
+    {id:'acion',label:'Acionamento (T1)',type:'select',options:[
+      {v:'pat',l:'Patrulhamento – a equipe viu o fato',t:', em patrulhamento pelo local dos fatos, a equipe visualizou {acion_det}'},
+      {v:'cetel',l:'Acionamento via CETEL/rádio',t:'a equipe foi acionada via CETEL/rádio para atendimento de ocorrência de {acion_det} no local dos fatos'},
+      {v:'mun',l:'Solicitação de munícipe',t:', em patrulhamento, a equipe foi solicitada por munícipe, que informou que {acion_det}'},
+      {v:'vit',l:'Solicitação da vítima no local',t:', em patrulhamento pelo local dos fatos, a equipe foi solicitada pela vítima, {acion_det}'},
+      {v:'alerta',l:'Alerta do Sistema Smart Sampa',t:'a equipe foi acionada via CETEL/rádio em razão de alerta do Sistema Smart Sampa ({tipoAlerta}), que indicou {acion_det} no local dos fatos'},
+      {v:'orgao',l:'Solicitação de outro órgão/autoridade',t:'a equipe foi solicitada por {acion_det}'},
+      ...extra]},
+    {id:'tipoAlerta',label:'Tipo de alerta',type:'select',showIf:{f:'acion',v:['alerta']},options:[
+      {v:'f',l:'Reconhecimento facial',t:'reconhecimento facial'},{v:'p',l:'Leitura de placa',t:'leitura de placa'},{v:'c',l:'Suspeita de placa clonada',t:'suspeita de placa clonada'},{v:'a',l:'Acesso a área monitorada',t:'acesso a área monitorada'}]},
+    {id:'acion_det',label:'Complemento do acionamento',type:'text',hintBy:{pat:'O que a equipe visualizou, como relatado. Ex.: "uma pessoa que, ao notar a aproximação da viatura, empreendeu fuga a pé"',cetel:'Natureza da ocorrência. Ex.: "perturbação de sossego"',mun:'O que o munícipe informou. Ex.: "havia uma motocicleta em estado de abandono no local"',vit:'Vítima: nome completo, CPF e o que relatou. Ex.: "Maria da Silva, CPF nº 000.000.000-00, que relatou que ..."',alerta:'O que o alerta indicou. Ex.: "pessoa com possível mandado de prisão em aberto" / "veículo com registro de furto ou roubo"',orgao:'Órgão/autoridade e finalidade. Ex.: "Oficial de Justiça NOME para acompanhar o cumprimento de mandado ..."'}},
+    {id:'apoio',label:'Apoio (viaturas, encarregados, PM)',type:'text',opt:true,hint:'Ex.: "VTR O-40106, encarregado Subinspetor Lima, e Polícia Militar, VTR T-01227, SD PM Nome, RE nº"'},
+  ],
+  pessoa: (id,label,opt=false,hint='Nome completo, CPF nº 000.000.000-00. Sem CPF: RG nº. Sem documento: "não apresentou documentação". Menor: iniciais, idade')=>({id,label,type:'text',opt,hint}),
+  t5: () => [
+    {g:'T5 – Condução e registro'},
+    {id:'conduzidos',label:'Quem/o que foi conduzido',type:'text',hint:'Ex.: "o abordado e o material" / "as partes" / "a vítima" / "o veículo"'},
+    {id:'unidade',label:'Unidade policial (com "ao" / "à")',type:'text',hint:'Ex.: "ao 50º Distrito Policial" / "à 4ª Delegacia de Defesa da Mulher" / "à Polícia Federal"'},
+    {id:'autoridade',label:'Autoridade Policial de Plantão',type:'text',hint:'Ex.: "Dr. Nome Completo" / "Dra. Nome Completo"'},
+    {id:'bo',label:'Nº do Boletim de Ocorrência',type:'text',hint:'Ex.: "NK9140-1/2026"'},
+    {id:'natureza',label:'Natureza conforme o BO (literal)',type:'text',hint:'Exatamente como consta do BO. Será colocada entre aspas.'},
+    {id:'docs',label:'Documentos complementares',type:'text',opt:true,hint:'Ex.: "o Recibo de Entrega de Preso" / "o Auto de Exibição e Apreensão" / "o Termo Circunstanciado"'},
+  ],
+  t6: () => [
+    {g:'T6 – Requisições da autoridade (só se constar do relato)'},
+    {id:'iml',label:'Exame de Corpo de Delito (IML)',type:'select',opt:true,options:[{v:'',l:'— não consta —',t:''},{v:'r',l:'Requisitado',t:'Foi requisitado Exame de Corpo de Delito junto ao IML[[ para {iml_quem}]].'},{v:'rj',l:'Requisitado, já realizado',t:'Foi requisitado Exame de Corpo de Delito junto ao IML[[ para {iml_quem}]], já realizado.'},{v:'n',l:'Deixou-se de requisitar (vítima relatou não ter sido agredida)',t:'Deixou-se de requisitar Exame de Corpo de Delito, uma vez que a vítima relatou não ter sido agredida.'}]},
+    {id:'iml_quem',label:'IML para quem',type:'text',opt:true,showIf:{f:'iml',v:['r','rj']},hint:'Ex.: "o abordado" / "a vítima e o autor" / "o abordado e o GCM Souza"'},
+    {id:'ic',label:'Constatação de substâncias no IC',type:'select',opt:true,options:[{v:'',l:'— não consta —',t:''},{v:'r',l:'Requisitada',t:'Foi requisitada a constatação das substâncias junto ao Instituto de Criminalística.'},{v:'rp',l:'Requisitada, com resultado positivo',t:'Foi requisitada a constatação das substâncias junto ao Instituto de Criminalística, com resultado positivo para {ic_res}.'}]},
+    {id:'ic_res',label:'Resultado positivo para',type:'text',opt:true,showIf:{f:'ic',v:['rp']},hint:'Ex.: "as substâncias e quantidades acima mencionadas"'},
+    {id:'pericia',label:'Perícia',type:'text',opt:true,hint:'Ex.: "no local, que permaneceu preservado pela VTR X, encarregado Y" / "no veículo, já realizada"'},
+  ],
+  t7p: (id='desf',label='Decisão sobre a pessoa (T7)') => [
+    {id,label,type:'select',options:[
+      {v:'',l:'— não consta (consultar a equipe) —',t:''},
+      {v:'c',l:'Recolhido(a) ao cárcere, à disposição da Justiça',t:'{desf_nome} foi recolhido(a) ao cárcere, permanecendo à disposição da Justiça.'},
+      {v:'cust',l:'Permaneceu para audiência de custódia',t:'{desf_nome} permaneceu na unidade policial para audiência de custódia, à disposição da Justiça.'},
+      {v:'lib',l:'Autoridade liberou a(s) parte(s)',t:'A Autoridade Policial liberou {desf_nome}.'},
+      {v:'tco',l:'Liberado(a) mediante Termo Circunstanciado',t:'{desf_nome} foi liberado(a) mediante Termo Circunstanciado.'},
+      {v:'casa',l:'Adolescente apreendido → Fundação CASA',t:'O adolescente {desf_nome} foi apreendido e encaminhado à Fundação CASA.'},
+      {v:'resp',l:'Entregue ao responsável',t:'{desf_nome} foi entregue ao responsável, {desf_resp}.'},
+      {v:'saude',l:'Encaminhado(a) a unidade de saúde',t:'{desf_nome} foi encaminhado(a) a {desf_resp}.'}]},
+    {id:'desf_nome',label:'Nome (ou "a parte" / "as partes" / "a vítima")',type:'text',hint:'Ex.: "Carlos" / "as partes" / "a vítima"'},
+    {id:'desf_resp',label:'Responsável / unidade de saúde',type:'text',opt:true,showIf:{f:id,v:['resp','saude']},hint:'Ex.: "Ana Ramiro, CPF nº ..." / "Hospital X, para internação"'},
+    {id:'desf2',label:'Decisão sobre outra pessoa',type:'text',opt:true,hint:'Frase completa, se houver. Ex.: "A Autoridade Policial liberou a vítima."'},
+  ],
+  bens: () => ({id:'bens',label:'Decisão sobre bens (T7)',type:'text',opt:true,hint:'Frase completa. Ex.: "As substâncias e o valor de R$ 62,00 permaneceram apreendidos." / "O veículo foi restituído ao proprietário, mediante apresentação da documentação."'}),
+  t8: () => ({id:'acess',label:'Fato acessório com a equipe (T8)',type:'textarea',opt:true,hint:'Só se houver. Ex.: "a VTR X foi atingida na lateral esquerda pelo caminhão placa Y, que mudou repentinamente de faixa; sem vítimas"'}),
+  t9: () => [
+    {g:'T9 – Fecho'},
+    {id:'posto',label:'Posto/graduação do operador',type:'text',hint:'Ex.: "Classe Especial"'},
+    {id:'nome_op',label:'Nome do operador',type:'text'},
+    {id:'dist',label:'Distintivo',type:'text'},
+  ],
+};
+const ABERT = 'Relata o policial acima qualificado que ';
+const APOIO = '[[, com apoio de {apoio}]]';
+const T5 = 'Diante dos fatos, a equipe conduziu {conduzidos} {unidade}, onde a Autoridade Policial de Plantão, {autoridade}, após ciência dos fatos, elaborou o Boletim de Ocorrência nº {bo}, natureza: “{natureza}”[[, bem como {docs}]].';
+const T6 = ' [[{iml}]] [[{ic}]] [[Foi requisitada perícia {pericia}.]]';
+const T7 = ' [[{desf}]] [[{desf2}]] [[{bens}]]';
+const T8 = '\n\n[[Registra-se ainda que, durante a ocorrência, {acess}.]]';
+const T9 = '\n\nClipping elaborado pela {posto} {nome_op}, distintivo {dist}.';
+const FIM = T6 + T7 + T8 + T9;
+
+// ===================== MODELOS =====================
+const MODELOS = [
+{code:'MB-01',nome:'Abordagem / averiguação',nat:'C05 · J03 · J06 · J07 · J08 · J13 · E06 · alertas do Smart Sampa',
+ hint:'Abordagem de pessoa, busca pessoal, consulta aos sistemas e resultado. Se a busca localizar droga, arma ou bem ilícito, use MB-02, MB-12 ou MB-04.',
+ fields:[...F.acion(),{g:'T2 – Abordagem e consulta'},F.pessoa('abordado','Pessoa abordada'),
+  {id:'busca',label:'Busca pessoal',type:'select',options:[{v:'n',l:'Nada de ilícito localizado',t:'nada de ilícito sendo localizado em sua posse'},{v:'s',l:'Localizado em sua posse:',t:'sendo localizado em sua posse: {busca_det}'}]},
+  {id:'busca_det',label:'O que foi localizado',type:'text',showIf:{f:'busca',v:['s']}},
+  {id:'consulta',label:'Resultado da consulta aos sistemas',type:'select',options:[{v:'m',l:'Mandado de prisão em aberto',t:'Em consulta aos sistemas, {conf} a existência de mandado de prisão em aberto em seu desfavor.'},{v:'n',l:'Nada que o desabonasse',t:'Em consulta aos sistemas, nada constou que o desabonasse.'},{v:'d',l:'Documento divergente / falsa identidade',t:'Solicitado a se identificar, o abordado {consulta_det}.'},{v:'o',l:'Outro (escrever)',t:'{consulta_det}'}]},
+  {id:'conf',label:'Verbo',type:'select',showIf:{f:'consulta',v:['m']},options:[{v:'c',l:'constatou-se (sem alerta prévio)',t:'constatou-se'},{v:'f',l:'confirmou-se (havia alerta do sistema)',t:'confirmou-se'}]},
+  {id:'consulta_det',label:'Detalhe da consulta',type:'text',showIf:{f:'consulta',v:['d','o']},hint:'Ex.: "apresentou RG em nome de X, que, em consulta, divergia dos dados dos sistemas, sendo posteriormente identificado como Y, CPF nº"'},
+  {id:'mandado',label:'Dados do mandado (se constar do relato)',type:'text',opt:true,hint:'Ex.: "referente ao Processo nº ..., expedido por ... em DATA, com validade até DATA, pela prática do art. 155 do Código Penal (furto)"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe localizou e abordou {abordado}, e realizou busca pessoal, {busca}. {consulta}\n\n'+T5+' [[A Autoridade Policial confirmou, em consulta aos sistemas, o mandado de prisão {mandado}.]]'+FIM,
+ check:['Motivo da abordagem sem adjetivos ou conclusões?','Abordado com nome completo e CPF?','Busca pessoal e consulta com resultado?','Alerta do sistema: confirmação feita pela equipe, não pelo sistema?','Natureza literal entre aspas; decisão atribuída à autoridade?']},
+
+{code:'MB-02',nome:'Entorpecentes e material ilícito',nat:'F01 · E10 · J10',
+ hint:'Substância = "substância com características de [tipo]". Quantidades exatas, na ordem do relato. Sem "área conhecida pelo tráfico".',
+ fields:[...F.acion(),{g:'T2/T3 – Abordagem e material'},F.pessoa('abordado','Pessoa abordada',true,'Deixe em branco se o material foi localizado sem pessoa'),
+  {id:'local_mat',label:'Onde o material estava',type:'text',hint:'Ex.: "em sua posse" / "na bolsa que portava" / "no interior do veículo" / "na sacola dispensada ao solo"'},
+  {id:'material',label:'Material localizado',type:'textarea',hint:'Um item por tipo, separados por ponto e vírgula. Ex.: "39 invólucros de substância com características de maconha; 81 invólucros de substância com características de cocaína; o valor de R$ 62,00 em espécie; um aparelho celular"'},
+  {id:'declar',label:'Declaração do abordado',type:'select',opt:true,options:[{v:'',l:'— não consta —',t:''},{v:'n',l:'Optou por não prestar esclarecimentos',t:'Indagado sobre a procedência do material, optou por não prestar esclarecimentos.'},{v:'v',l:'Apresentou versões divergentes',t:'Indagado sobre a procedência do material, apresentou versões divergentes.'},{v:'o',l:'Informou que (escrever)',t:'Indagado sobre a procedência do material, informou que {declar_det}.'}]},
+  {id:'declar_det',label:'O que informou',type:'text',showIf:{f:'declar',v:['o']}},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. [[Identificado(a) como {abordado}, foi realizada busca pessoal, sendo localizados {local_mat}: {material}.]][[{not_abordado}Foram localizados {local_mat}: {material}.]] [[{declar}]]\n\n'+T5+FIM,
+ check:['Motivo da abordagem descreve fato observado, sem qualificar local/pessoa?','Cada substância: quantidade + forma + "características de"?','Valores exatos e objetos descritos?','Natureza literal; nada de "tráfico/uso" fora dela?','Destino do material atribuído à autoridade (lacuna obrigatória)?'],
+},
+
+{code:'MB-03',nome:'Veículo localizado ou irregular',nat:'L01 · L03 · L05 · B01/B04 (veículo)',
+ hint:'Veículo → consulta → condutor/proprietário → condução → decisão sobre o veículo. "Conduzidos: 0" no cabeçalho é normal quando só o veículo é conduzido.',
+ fields:[...F.acion().map(f=>f.id==='acion_det'?{...f,opt:true,hintBy:{...f.hintBy,pat:'Deixe em branco: o veículo do campo abaixo será inserido automaticamente após "visualizou".'}}:f),{g:'Veículo e consulta'},
+  {id:'veic',label:'Veículo',type:'text',hint:'Ex.: "a motocicleta HONDA/CG 160 TITAN, cor preta, placa ABC1D23"'},
+  {id:'situacao',label:'Situação em que foi visto',type:'text',hint:'Ex.: "estacionada de forma irregular" / "em estado de abandono" / "ostentando placa aparentemente adulterada, em circulação"'},
+  {id:'consulta',label:'Consulta e resultado',type:'text',hint:'Ex.: "Em consulta ao emplacamento, constatou-se registro de roubo, conforme Boletim de Ocorrência nº X, de DATA" / "a placa não retornou registro; em pesquisa pelo chassi, o veículo correspondia à placa Y, com registro de baixa permanente"'},
+  {id:'condutor',label:'Condutor abordado',type:'text',opt:true,hint:'Ex.: "Nome, CPF nº ..., que não possuía habilitação" — só se houve abordagem'},
+  {id:'declar',label:'Declaração do condutor',type:'text',opt:true,hint:'Em discurso indireto. Ex.: "ter adquirido a motocicleta em leilão, já naquelas condições"'},
+  {id:'prop',label:'Proprietário/vítima e contato',type:'text',opt:true,hint:'Ex.: "Nome, CPF nº ..., que confirmou o roubo, ocorrido em DATA, e compareceu à unidade policial"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},
+  {id:'bens',label:'Decisão sobre o veículo',type:'select',options:[{v:'',l:'— não consta (consultar a equipe) —',t:''},{v:'r',l:'Restituído ao proprietário',t:'O veículo foi restituído ao proprietário[[, {bens_det}]].'},{v:'a',l:'Apreendido',t:'A Autoridade Policial apreendeu o veículo[[ {bens_det}]].'},{v:'p',l:'Encaminhado ao pátio',t:'O veículo foi encaminhado ao pátio[[ {bens_det}]].'}]},
+  {id:'bens_det',label:'Complemento',type:'text',opt:true,hint:'Ex.: "mediante apresentação da documentação" / "e liberou a parte"'},
+  ...F.t7p('desf','Decisão sobre a pessoa (se houver)'),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'[[{has_acion_det}. No local, a equipe localizou]] {veic}, {situacao}[[, e procedeu à abordagem do condutor, identificado como {condutor}]]. {consulta}. [[Indagado, o condutor informou {declar}.]] [[A equipe realizou contato com o proprietário, {prop}.]]\n\n'+T5+T6+' [[{bens}]] [[{desf}]] [[{desf2}]]'+T8+T9,
+ check:['Veículo com tipo, marca/modelo, cor e placa, grafia única?','Consulta com placa/chassi, BO de origem e data?','Habilitação só afirmada após a abordagem?','Proprietário/vítima com nome, CPF e o que confirmou?','Decisão sobre o veículo atribuída à autoridade?']},
+
+{code:'MB-04',nome:'Furto e roubo',nat:'B01 · B02 · B03 · B04 · B10',
+ hint:'Furto ou roubo é decisão da autoridade (natureza literal). A equipe relata o meio empregado; o operador transcreve.',
+ fields:[...F.acion(),{g:'T4 – Vítima'},F.pessoa('vitima','Vítima',true),
+  {id:'relato',label:'Relato da vítima',type:'textarea',opt:true,hint:'Discurso indireto, na sequência da vítima. Ex.: "que, há instantes, uma pessoa em bicicleta subtraiu seu aparelho celular, evadindo-se em direção ignorada"'},
+  {id:'bem',label:'Bem subtraído',type:'text',opt:true,hint:'Ex.: "um aparelho celular Samsung, avaliado pela vítima em R$ 1.500,00" (valor só se relatado)'},
+  {g:'T2 – Autor abordado (se houver)'},F.pessoa('autor','Pessoa abordada',true),
+  {id:'busca',label:'Resultado da busca / consulta',type:'text',opt:true,hint:'Ex.: "sendo localizado em sua posse o aparelho, reconhecido pela vítima" / "portava um aparelho cujo IMEI constava como produto de roubo ocorrido em DATA, BO nº X"'},
+  {id:'declar',label:'Declaração do abordado',type:'text',opt:true,hint:'Ex.: "apresentou versões divergentes" / "optou por não prestar esclarecimentos"'},
+  {id:'dilig',label:'Diligências sem êxito',type:'text',opt:true,hint:'Ex.: "A equipe realizou patrulhamento pelas imediações, não logrando êxito em localizar o autor."'},
+  ...F.t5(),{id:'contato_vit',label:'Contato da autoridade com a vítima ausente',type:'text',opt:true,hint:'Ex.: "e realizou contato com a vítima, Nome, CPF nº ..., proprietário do aparelho, que informou que compareceria em data posterior para retirá-lo"'},
+  ...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. [[A vítima, {vitima}, relatou {relato}.]] [[Bem subtraído: {bem}.]] [[A equipe abordou {autor}, {busca}.]] [[Indagado, o abordado {declar}.]] [[{dilig}]]\n\n'+T5.replace('[[, bem como {docs}]].','[[, bem como {docs}]][[, {contato_vit}]].')+FIM,
+ check:['Vítima identificada (ou "não apresentou documentação")?','Relato em discurso indireto, sem acréscimos?','Meio empregado nas palavras da equipe?','Bem descrito; valor só "avaliado pela vítima"?','Destino do bem e decisão sobre a pessoa constam?'],
+ post: s => s.replace('Bem subtraído: ','O bem subtraído: ')},
+
+{code:'MB-05',nome:'Ameaça, honra e discriminação',nat:'A10 · A15 · A16 · A17 · A18 · A19 · A32',
+ hint:'Teor entre aspas, como no relato. Sentimento atribuído à vítima. Relação doméstica → MB-06.',
+ fields:[...F.acion(),{g:'T4 – Vítima, autor e teor'},F.pessoa('vitima','Vítima'),
+  {id:'papel_v',label:'Papel/contexto da vítima',type:'text',opt:true,hint:'Ex.: "funcionária do estabelecimento"'},
+  F.pessoa('autor','Autor (como relatado)',true),
+  {id:'papel_a',label:'Papel/relação do autor',type:'text',opt:true,hint:'Ex.: "cliente" / "vizinho"'},
+  {id:'fato',label:'O que o autor fez',type:'text',hint:'Ex.: "proferiu palavras de cunho racial em sua direção, chamando-a de “neguinha”" / "ameaçou-a, dizendo-lhe “...”"'},
+  {id:'sentiu',label:'O que a vítima relatou ter sentido',type:'text',opt:true,hint:'Ex.: "se sentiu ofendida e discriminada em razão de sua raça/cor" / "teme por sua integridade"'},
+  F.pessoa('testemunha','Testemunha',true),
+  {id:'contato_autor',label:'Contato com o autor',type:'text',opt:true,hint:'Ex.: "optou por não se manifestar" / "informou que ..."'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe realizou contato com a vítima, {vitima}[[, {papel_v}]], que relatou que [[{papel_a} ]]{autor} {fato}[[, e que {sentiu}]]. [[Fato confirmado pela testemunha {testemunha}.]] [[A equipe realizou contato com o autor, que {contato_autor}.]]\n\n'+T5+FIM,
+ check:['Teor entre aspas, como no relato?','Sentimento atribuído à vítima?','Sem condicional dentro de "relatou que"?','Natureza literal; cabeçalho coerente (senão, supervisão)?','IML só se agressão; decisão atribuída à autoridade?']},
+
+{code:'MB-06',nome:'Violência doméstica',nat:'D14 (+ A05, A10, A17)',
+ hint:'Relação entre as partes nas palavras da vítima. Medida protetiva só se informada. Crianças por iniciais + idade.',
+ fields:[...F.acion([{v:'ddm',l:'Solicitação da DDM (apoio)',t:'a equipe foi solicitada pela Autoridade Policial da {acion_det}'}]),{g:'T4 – Vítima, relação e fato'},F.pessoa('vitima','Vítima'),
+  {id:'relacao',label:'Relação do autor com a vítima',type:'text',hint:'Ex.: "seu ex-companheiro" / "seu cônjuge"'},F.pessoa('autor','Autor'),
+  {id:'fato',label:'Fato relatado',type:'textarea',hint:'Ex.: "a agrediu com socos" / "a ameaçou, dizendo-lhe “...”" / "não aceita o fim do relacionamento e a ameaça constantemente"'},
+  {id:'mpu',label:'Medida protetiva',type:'text',opt:true,hint:'Ex.: "possui medida protetiva em vigor em seu favor" / "o autor descumpriu medida protetiva ao ..."'},
+  {id:'criancas',label:'Crianças no local',type:'text',opt:true,hint:'Ex.: "os filhos do casal, A. B., 5 anos, e C. D., 8 anos"'},
+  {id:'lesoes',label:'Lesões e socorro',type:'text',opt:true,hint:'Como a equipe descreveu. Ex.: "escoriações no braço esquerdo, sendo socorrida pelo SAMU ao Hospital X"'},
+  {id:'autor_loc',label:'Autor localizado/abordado',type:'text',opt:true,hint:'Ex.: "no local, que optou por não se manifestar" / "não se encontrava no local"'},
+  {id:'apoio_ddm',label:'Atuação no apoio (variante DDM)',type:'text',opt:true,hint:'Ex.: "acompanhou a vítima até a residência, onde logrou êxito na retirada de seus pertences pessoais"'},
+  {id:'abrigo',label:'Encaminhamento a abrigo',type:'text',opt:true,hint:'Ex.: "A vítima recusou encaminhamento a abrigo, conforme relatado."'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. [[A equipe {apoio_ddm}.]] No local, a equipe realizou contato com a vítima, {vitima}, que relatou que {relacao}, {autor}, {fato}[[, e que {mpu}]]. [[Encontravam-se no local {criancas}.]] [[A vítima apresentava {lesoes}.]] [[A equipe localizou o autor {autor_loc}.]] [[{abrigo}]]\n\n'+T5+FIM,
+ check:['Relação nas palavras da vítima?','Ameaças/ofensas entre aspas?','Medida protetiva só se informada?','Crianças por iniciais + idade?','Unidade (DDM/DP) e natureza literal; decisão atribuída à autoridade?']},
+
+{code:'MB-07',nome:'Agressão e lesão corporal',nat:'A05 · A30 · A14 · A03 · A25',
+ hint:'Lesões como a equipe descreveu, sem diagnóstico. Para acidente de trânsito use MB-07T.',
+ fields:[...F.acion(),{g:'T4 – Vítima, autor e meio'},F.pessoa('vitima','Vítima'),F.pessoa('autor','Autor',true),
+  {id:'contexto',label:'Relação/contexto',type:'text',opt:true,hint:'Ex.: "vizinho" / "cliente do estabelecimento"'},
+  {id:'meio',label:'Meio empregado',type:'text',hint:'Ex.: "com socos e chutes" / "com uma barra de ferro"'},
+  {id:'motivo',label:'Motivo relatado',type:'text',opt:true,hint:'Ex.: "desentendimento por vaga de estacionamento, conforme relatado"'},
+  {id:'lesoes',label:'Lesões e socorro',type:'text',opt:true,hint:'Ex.: "escoriações na face, sendo socorrida pelo SAMU ao Hospital X"'},
+  F.pessoa('testemunha','Testemunha',true),
+  {id:'autor_loc',label:'Autor abordado',type:'text',opt:true,hint:'Ex.: "nas imediações, que optou por não se manifestar"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe realizou contato com a vítima, {vitima}, que relatou que [[{contexto} ]]{autor} a agrediu {meio}[[, em razão de {motivo}]]. [[A vítima apresentava {lesoes}.]] [[Fato confirmado pela testemunha {testemunha}.]] [[A equipe abordou o autor {autor_loc}.]]\n\n'+T5+FIM,
+ check:['Meio e lesões como relatados, sem gravidade/diagnóstico?','Socorro: quem, para onde?','IML só se requisitado?','Decisão atribuída à autoridade?']},
+
+{code:'MB-07T',nome:'Acidente de trânsito com vítima (variante 07-C)',nat:'L07 · L08 · L12 · C03 (ao volante) · A30',
+ hint:'Um veículo por item; dinâmica atribuída ("conforme informações colhidas"); sinais de embriaguez como observação.',
+ fields:[...F.acion(),{g:'Veículos e dinâmica'},
+  {id:'nveic',label:'Número de veículos',type:'text',hint:'Ex.: "dois" / "três"'},
+  {id:'veiculos',label:'Veículos e condutores',type:'textarea',hint:'Um por item, separados por ponto e vírgula. Ex.: "Honda/City, cor prata, placa ABC1D23, conduzido por Nome, RG nº ...; VW/Kombi, cor branca, placa ..., conduzida por ..."'},
+  {id:'dinamica',label:'Dinâmica (conforme informações colhidas)',type:'textarea',hint:'Ex.: "o I/JAC V260, conduzido por Tiago, colidiu contra o Honda/City, conduzido por Solange, que atingiu a VW/Kombi"'},
+  {id:'vitimas',label:'Vítimas e socorro',type:'textarea',opt:true,hint:'Ex.: "A criança L. P. I. da S., 11 anos, ocupante do Honda/City, sofreu impacto na região da cabeça e foi socorrida pela VTR O-40106 ao Hospital X, onde permaneceu sob cuidados médicos."'},
+  {id:'embriaguez',label:'Sinais de embriaguez / etilômetro',type:'textarea',opt:true,hint:'Ex.: "o condutor Tiago apresentava sinais indicativos de possível ingestão de bebida alcoólica, tais como fala confusa e odor etílico; indagado, informou ter ingerido bebida alcoólica. Foi acionada a Polícia Militar, VTR X, SD PM Nome, RE nº, para teste de etilômetro: Solange e Jucilene realizaram o teste, com resultado negativo; Tiago recusou-se a realizá-lo"'},
+  {id:'preserv',label:'Preservação do local',type:'text',opt:true,hint:'Ex.: "pela VTR O-40103, encarregado Subinspetor Lima"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),
+  {id:'bens',label:'Decisão sobre os veículos',type:'text',opt:true,hint:'Ex.: "Os veículos, após perícia, foram entregues aos respectivos proprietários; o veículo de Tiago foi entregue a familiar habilitado."'},F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe constatou acidente envolvendo {nveic} veículos: {veiculos}. Conforme informações colhidas no local, {dinamica}. [[{vitimas}]] [[Durante o atendimento, a equipe constatou que {embriaguez}.]] [[O local permaneceu preservado {preserv}.]]\n\n'+T5+FIM,
+ check:['Cada veículo com tipo, marca/modelo, cor, placa e condutor?','Dinâmica atribuída?','Embriaguez como observação; etilômetro (aceite/recusa/resultado) como relatado?','Decisão sobre pessoas e veículos atribuída à autoridade?']},
+
+{code:'MB-08',nome:'Crimes sexuais',nat:'D01 · D02 · D05 · D13 · D03 · D04 · D06',
+ hint:'Vítima sempre por iniciais + idade + sexo. O ato não é descrito.',
+ fields:[...F.acion(),{g:'Vítima e fato (genérico)'},
+  {id:'vitima',label:'Vítima (iniciais, idade, sexo)',type:'text',hint:'Ex.: "M. S., 23 anos, sexo feminino"'},
+  {id:'resp',label:'Responsável (se menor)',type:'text',opt:true,hint:'Nome completo, CPF nº'},
+  {id:'fato',label:'Fato, de forma genérica',type:'text',hint:'Ex.: "ter sido vítima de violência sexual" / "ter sido vítima de importunação" / "que NOME praticou ato obsceno em sua presença"'},
+  F.pessoa('autor','Autor',true),{id:'relacao',label:'Relação (se relatada)',type:'text',opt:true},
+  {id:'hosp',label:'Acolhimento / hospital',type:'text',opt:true,hint:'Ex.: "A vítima foi encaminhada ao Hospital Pérola Byington."'},
+  {id:'autor_loc',label:'Autor abordado',type:'text',opt:true,hint:'Ex.: "no local, que optou por não se manifestar"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe realizou contato com a vítima, {vitima}[[, acompanhada do responsável, {resp}]], que relatou {fato}[[ praticada por {autor}]][[, {relacao}]]. [[{hosp}]] [[A equipe localizou e abordou o autor {autor_loc}.]]\n\n'+T5+FIM,
+ check:['Vítima só por iniciais + idade + sexo?','Sem detalhes do ato?','Responsável de menor com nome e CPF?','Natureza literal; IML só se requisitado?']},
+
+{code:'MB-09',nome:'Morte de pessoa',nat:'A31 · A01 · A02 · A21 · A22 · A06 · B11',
+ hint:'Nunca atribuir causa da morte. Registrar o que a equipe encontrou, quem constatou o óbito, preservação, órgãos, pessoas ouvidas (resumido).',
+ fields:[...F.acion(),{g:'O que foi encontrado'},
+  {id:'vitima',label:'Vítima',type:'text',hint:'Nome completo, CPF/RG; menor: iniciais + idade; "pessoa não identificada, sexo X"'},
+  {id:'encontrado',label:'O que a equipe encontrou / foi informada',type:'textarea',hint:'Como relatado. Ex.: "havia sido socorrida por familiares à unidade, onde recebeu atendimento médico e evoluiu a óbito"'},
+  {id:'obito',label:'Constatação do óbito',type:'text',opt:true,hint:'Ex.: "pela equipe do SAMU às 17h30"'},
+  {id:'preserv',label:'Preservação do local',type:'text',opt:true,hint:'Ex.: "pela VTR L-21010, encarregado CE Marino"'},
+  {id:'orgaos',label:'Órgãos acionados',type:'text',opt:true,hint:'Ex.: "a Polícia Militar e a Polícia Civil"'},
+  {id:'ouvidos',label:'Pessoas ouvidas (resumido)',type:'textarea',opt:true,hint:'Ex.: "A equipe realizou contato com a mãe, Nome, CPF nº ..., que relatou que ..."'},
+  ...F.t5(),{id:'dilig_aut',label:'Diligência da autoridade',type:'text',opt:true,hint:'Ex.: "após ouvir as partes e dirigir-se ao PA para contato com a equipe de enfermagem"'},
+  ...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe [[foi informada de que ]]{vitima} {encontrado}. [[O óbito foi constatado {obito}.]] [[O local permaneceu preservado {preserv}.]] [[Foram acionadas {orgaos}.]] [[{ouvidos}]]\n\n'+T5.replace('após ciência dos fatos,','após ciência dos fatos[[, {dilig_aut},]]')+FIM,
+ check:['Nenhuma causa da morte fora da natureza do BO?','Quem constatou o óbito?','Preservação e órgãos?','Relatos resumidos e atribuídos?','Perícia/IML como relatados?']},
+
+{code:'MB-10',nome:'Desaparecimento / pessoa localizada',nat:'M12',
+ hint:'Alerta do sistema é motivo; a equipe confirma. Condições da pessoa só se relatadas e atribuídas.',
+ fields:[...F.acion(),{g:'Pessoa e familiar'},F.pessoa('pessoa','Pessoa localizada / desaparecida'),
+  {id:'cond',label:'Condição relatada',type:'text',opt:true,hint:'Ex.: "conforme relatado, necessita de cuidados"'},
+  {id:'bo_ant',label:'Registro anterior de desaparecimento',type:'text',opt:true,hint:'Ex.: "conforme Boletim de Ocorrência nº X"'},
+  {id:'familiar',label:'Familiar / responsável e contato',type:'text',opt:true,hint:'Ex.: "a familiar Ana Ramiro, CPF nº ..., que compareceu à unidade policial"'},
+  {id:'comunic',label:'Variante comunicação: última vez vista',type:'text',opt:true,hint:'Ex.: "visto pela última vez em DATA, em LOCAL"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe localizou e abordou {pessoa}, confirmando tratar-se da pessoa indicada[[, que, {cond}]][[, com registro de desaparecimento {bo_ant}]]. [[{comunic}.]] [[A equipe realizou contato com {familiar}.]]\n\n'+T5+FIM,
+ check:['Confirmação pela equipe?','Menores por iniciais + idade?','Condição só se relatada e atribuída?','Entrega ao responsável atribuída à autoridade?']},
+
+{code:'MB-11',nome:'Vulneráveis (criança, adolescente, idoso, incapaz)',nat:'A08 · A26 · A27 · A28 · A29 · A07 · N19 · D12 · D06',
+ hint:'Menores/incapazes por iniciais + idade. Conselho Tutelar como relatado. Decisão de entrega é da autoridade/CT.',
+ fields:[...F.acion(),{g:'Situação e responsáveis'},
+  {id:'vuln',label:'Pessoa vulnerável',type:'text',hint:'Ex.: "a criança A. B. C., 6 anos" / "Nome completo, CPF nº, 78 anos"'},
+  {id:'situacao',label:'Situação encontrada',type:'textarea',hint:'Como a equipe descreveu. Ex.: "sozinha em via pública, sem calçados, conforme relatado"'},
+  {id:'declar',label:'Declaração da pessoa',type:'text',opt:true},
+  {id:'resp',label:'Responsável legal e contato',type:'text',opt:true,hint:'Ex.: "a mãe, Nome, CPF nº ..., que informou que ..." / "não foi localizado"'},
+  F.pessoa('autor','Autor (maus tratos / estabelecimento)',true),
+  {id:'ct',label:'Conselho Tutelar / órgão',type:'text',opt:true,hint:'Ex.: "Foi acionado o Conselho Tutelar, conselheira Nome, que compareceu ao local."'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe localizou {vuln}, {situacao}. [[{vuln} informou que {declar}.]] [[A equipe localizou {resp}.]] [[Foi identificado como autor {autor}.]] [[{ct}]]\n\n'+T5+FIM,
+ check:['Iniciais + idade?','Situação como observação, sem juízo sobre os pais?','Conselho Tutelar como relatado?','Entrega/guarda atribuída à autoridade ou CT?']},
+
+{code:'MB-12',nome:'Arma de fogo',nat:'J09',
+ hint:'Descrever a arma só com os dados relatados. "Simulacro" só se a equipe/autoridade classificou.',
+ fields:[...F.acion(),{g:'Abordagem e arma'},F.pessoa('abordado','Pessoa abordada',true),
+  {id:'local_arma',label:'Onde a arma estava',type:'text',hint:'Ex.: "na cintura" / "na mochila" / "no interior do veículo, sob o banco"'},
+  {id:'arma',label:'Arma e munições',type:'text',hint:'Ex.: "um revólver calibre .38, marca Taurus, numeração X, municiado com 5 cartuchos íntegros"'},
+  {id:'docarma',label:'Documento de registro/porte',type:'text',opt:true,hint:'Ex.: "não apresentou documento de registro ou porte"'},
+  {id:'disparo',label:'Disparo e vítimas',type:'textarea',opt:true,hint:'Ex.: "efetuou dois disparos contra Nome, CPF nº, atingido na perna esquerda, socorrido pelo SAMU ao Hospital X, conforme relatado"'},
+  {id:'pm',label:'Polícia Militar',type:'text',opt:true,hint:'Ex.: "VTR X, SD PM Nome, RE nº"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. [[No local, a equipe abordou {abordado}. Realizada busca pessoal, foi localizado(a) {local_arma} {arma}.]][[{not_abordado}Foi localizado(a) {local_arma} {arma}.]] [[Indagado, o abordado {docarma}.]] [[Conforme relatado, {disparo}.]] [[Foi acionada a Polícia Militar, {pm}.]]\n\n'+T5+FIM,
+ check:['Arma só com dados relatados?','Onde estava e com quem?','Registro/porte como relatado?','Disparo/vítimas como relatados?','Arma e munições "permaneceram apreendidas"?'],
+},
+
+{code:'MB-13',nome:'Desacato, desobediência e resistência',nat:'E08 · E09 · E13',
+ hint:'Ordem: contexto → ordem dada → conduta (palavras entre aspas, atos sem adjetivos) → força/algemas com justificativa → lesões → IML para ambos.',
+ fields:[...F.acion(),{g:'Ordem e conduta'},F.pessoa('envolvido','Envolvido'),
+  {id:'ordem',label:'Ordem dada',type:'text',hint:'Discurso indireto. Ex.: "a reduzir o volume do aparelho de som" / "a apresentar documento"'},
+  {id:'conduta',label:'Conduta',type:'textarea',hint:'Ex.: "recusou-se a cumprir a determinação e passou a ofender os integrantes da equipe, dirigindo-se ao GCM 3ª Classe Souza com as palavras “...”, e desferiu um empurrão contra o referido GCM"'},
+  {id:'forca',label:'Uso de força / algemas e justificativa',type:'text',opt:true,hint:'Ex.: "Diante da resistência, foi necessário o uso de algemas para a contenção, conforme relatado."'},
+  {id:'lesoes',label:'Lesões (GCM e envolvido)',type:'text',opt:true,hint:'Ex.: "O GCM Souza não sofreu lesões; o abordado apresentava escoriação no punho direito, conforme relatado."'},
+  F.pessoa('testemunha','Testemunha',true),
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe orientou {envolvido} {ordem}, momento em que o abordado {conduta}. [[{forca}]] [[{lesoes}]] [[Fato presenciado por {testemunha}.]]\n\n'+T5+FIM,
+ check:['Contexto e ordem antes da conduta?','Palavras entre aspas; atos sem adjetivos?','Força/algemas com justificativa relatada?','Lesões e IML para ambos?','Natureza literal?']},
+
+{code:'MB-14',nome:'Dano e invasão de patrimônio',nat:'B07 · P19 · P20 · B06 · A12 · B12',
+ hint:'Bem identificado com o responsável. Dano como visto; valor só "avaliado pelo responsável".',
+ fields:[...F.acion(),{g:'Bem, responsável e dano'},
+  {id:'bem',label:'Bem atingido',type:'text',hint:'Ex.: "a Escola Municipal X" / "o imóvel situado na Rua Y, nº Z"'},
+  {id:'acao',label:'Ação vista / ocupação',type:'text',opt:true,hint:'Ex.: "Nome, CPF nº, pichando o muro com tinta preta, e procedeu à abordagem" / "a presença de cerca de 20 pessoas no interior do imóvel, conforme relatado"'},
+  {id:'resp',label:'Responsável pelo bem',type:'text',hint:'Ex.: "Nome, CPF nº ..., diretora da unidade"'},
+  {id:'dano',label:'Dano constatado',type:'text',hint:'Ex.: "vidro da porta de entrada quebrado, avaliado pelo responsável em R$ 400,00"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+' em {bem}. [[No local, a equipe visualizou {acao}.]] A equipe realizou contato com o responsável pelo bem, {resp}, que constatou {dano}.\n\n'+T5+FIM,
+ check:['Responsável com nome, CPF e função?','Dano como visto?','Invasão: quantidade só se relatada; nenhuma desocupação atribuída à GCM?']},
+
+{code:'MB-15',nome:'Fraude e patrimônio sem violência',nat:'B05 · B08 · B09 · G02',
+ hint:'Sem "golpe/estelionato" fora do BO. Valores como relatados.',
+ fields:[...F.acion(),{g:'Vítima e relato'},F.pessoa('vitima','Vítima / comunicante'),
+  {id:'relato',label:'Relato',type:'textarea',hint:'Discurso indireto. Ex.: "realizou transferência de R$ 2.000,00 a pessoa que se apresentou como funcionária do banco, por telefone"'},
+  F.pessoa('autor','Autor (se identificado)',true),
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe realizou contato com a vítima, {vitima}, que relatou que {relato}[[, indicando como autor {autor}]].\n\n'+T5+FIM,
+ check:['Relato em discurso indireto?','Valores como relatados?','Autor só como a vítima relatou?']},
+
+{code:'MB-16',nome:'Fauna e crimes ambientais',nat:'N26 · N28 · N30 · N31 · P06 · P12–P26 · N06',
+ hint:'Espécies e quantidades como relatadas. Destino dos animais é decisão da autoridade.',
+ fields:[...F.acion(),{g:'Constatação'},
+  {id:'encontrado',label:'O que a equipe visualizou/constatou',type:'textarea',hint:'Ex.: "6 aves acondicionadas em 5 gaiolas em frente a uma residência" / "descarte de entulho em área de proteção, com o caminhão placa X"'},
+  F.pessoa('resp','Responsável (posteriormente identificado)',true),
+  {id:'doc',label:'Documentação',type:'text',opt:true,hint:'Ex.: "não apresentou documento que autorizasse a posse das aves"'},
+  {id:'especies',label:'Espécies / material',type:'text',opt:true,hint:'Ex.: "3 canários-da-terra, 1 trinca-ferro, 1 azulão e 1 preto, conforme relatado"'},
+  {id:'orgao',label:'Órgão ambiental acionado',type:'text',opt:true,hint:'Ex.: "a Polícia Ambiental, que compareceu ao local"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},
+  {id:'destino',label:'Destino dos animais / material',type:'text',opt:true,hint:'Ex.: "A Autoridade Policial requisitou o encaminhamento das aves ao CEMACAS, onde permaneceram sob cuidados de médico veterinário."'},
+  ...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe visualizou {encontrado}[[, sendo o responsável posteriormente identificado como {resp}]]. [[Indagado, {doc}]][[, identificados como {especies}]]. [[Foi acionada {orgao}.]]\n\n'+T5+' [[{iml}]] [[{ic}]] [[Foi requisitada perícia {pericia}.]] [[{destino}]] [[{desf}]] [[{desf2}]]'+T8+T9,
+ check:['Espécies e quantidades como relatadas?','Documentação como relatada?','Órgão ambiental?','Destino atribuído à autoridade?']},
+
+{code:'MB-17',nome:'Atividade irregular e perturbação com condução',nat:'J01 · J12 · D08 · D09 · C01 · C02 · C99 · Z07 · Z10 · Z11',
+ hint:'"Irregular" só quando constatado por quem (equipe/órgão). Público estimado só se relatado.',
+ fields:[...F.acion(),{g:'Local, responsável e irregularidade'},
+  {id:'local',label:'Local / atividade',type:'text',hint:'Ex.: "o estabelecimento comercial X" / "aglomeração com som automotivo em volume elevado"'},
+  {id:'irreg',label:'Irregularidade constatada (por quem)',type:'text',hint:'Ex.: "o agente vistor da Subprefeitura, Nome, constatou funcionamento sem licença" / "orientado a cessar o som, recusou-se"'},
+  F.pessoa('resp','Responsável'),{id:'funcao',label:'Função do responsável',type:'text',opt:true,hint:'Ex.: "proprietário" / "responsável pelo aparelho de som"'},
+  {id:'auto',label:'Auto lavrado pelo órgão',type:'text',opt:true,hint:'Ex.: "Foi lavrado pelo órgão o Auto de Infração nº X, conforme relatado."'},
+  {id:'material',label:'Material/equipamentos apreendidos',type:'text',opt:true},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. No local, a equipe compareceu a {local}, onde {irreg}. O responsável, {resp}[[, {funcao}]], foi identificado. [[{auto}]] [[Foram apreendidos {material}.]]\n\n'+T5+FIM,
+ check:['Irregularidade atribuída a quem constatou?','Responsável com função?','Estimativas só se relatadas?','Recusa/ofensa → MB-13?']},
+
+{code:'MB-18',nome:'Apoio a outro órgão com condução',nat:'E07 (todas) · H01–H06',
+ hint:'A GCM descreve o que ela fez. A ação do outro órgão só "conforme relatado".',
+ fields:[...F.acion([{v:'apoio',l:'Apoio solicitado (padrão)',t:'a equipe foi solicitada por {acion_det}'}]),{g:'Apoio'},
+  {id:'final',label:'Finalidade do apoio',type:'text',hint:'Ex.: "acompanhar o cumprimento de mandado de reintegração de posse, Processo nº X, no imóvel situado na Rua Y"'},
+  {id:'atuacao',label:'Atuação da GCM',type:'textarea',hint:'Ex.: "realizou o isolamento do local e acompanhou a diligência, que se concluiu sem intercorrências"'},
+  {id:'ocorr',label:'Ocorrência surgida durante o apoio',type:'textarea',opt:true,hint:'Ex.: "Durante o apoio, Nome, CPF nº, opôs-se à diligência, ... (blocos do modelo correspondente)"'},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion} para {final}'+APOIO+'. A equipe {atuacao}. [[{ocorr}]]\n\n'+T5+FIM,
+ check:['Quem solicitou e para quê?','O que a GCM fez?','Ocorrência surgida com o modelo próprio?','BO com participação da GCM?']},
+
+{code:'MB-00',nome:'Genérico (naturezas raras conduzidas)',nat:'A04 · A11 · C06–C09 · D07 · E01–E05 · E11 · J02 · J04 · J05 · J11 · outras',
+ hint:'Dinâmica livre: frases curtas, ordem cronológica, cada fato atribuído à fonte, sem adjetivos.',
+ fields:[...F.acion(),{g:'Dinâmica'},
+  {id:'dinamica',label:'Dinâmica (ordem cronológica, cada fato com sua fonte)',type:'textarea',hint:'Ex.: "No local, a equipe realizou contato com Nome, CPF nº, que relatou que ... A equipe constatou ..."'},
+  {id:'envolvidos',label:'Envolvidos adicionais',type:'text',opt:true},
+  {id:'objetos',label:'Objetos / material / veículo',type:'text',opt:true},
+  ...F.t5(),...F.t6(),{g:'T7 – Decisão'},...F.t7p(),F.bens(),F.t8(),...F.t9()],
+ tpl: ABERT+'{acion}'+APOIO+'. {dinamica} [[{envolvidos}.]] [[{objetos}.]]\n\n'+T5+FIM,
+ check:['Ordem cronológica e fonte de cada fato?','Nenhum adjetivo ou conclusão?','T5 e T7 completos?']},
+];
+
+// ===================== MOTOR =====================
+const $ = s => document.querySelector(s);
+const sel = $('#modelo'), form = $('#form'), saida = $('#saida');
+let atual = null;
+MODELOS.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${m.code}  ${m.nome}  ·  ${m.nat}`;sel.appendChild(o);});
+
+function montar(){
+  atual = MODELOS[sel.value]; form.innerHTML=''; $('#modeloHint').textContent = atual.hint||'';
+  atual.fields.forEach(f=>{
+    if(f.g){const d=document.createElement('div');d.className='grupo';d.innerHTML=`<h3>${f.g}</h3>`;form.appendChild(d);return;}
+    const w=document.createElement('div');w.dataset.id=f.id;
+    const lab=document.createElement('label');lab.htmlFor='f_'+f.id;lab.innerHTML=f.label+(f.opt?' <span class="opt">(opcional)</span>':'');w.appendChild(lab);
+    let el;
+    if(f.type==='select'){el=document.createElement('select');f.options.forEach(o=>{const op=document.createElement('option');op.value=o.v;op.textContent=o.l;el.appendChild(op);});}
+    else if(f.type==='textarea'){el=document.createElement('textarea');}
+    else{el=document.createElement('input');el.type='text';}
+    el.id='f_'+f.id;el.autocomplete='off';el.spellcheck=true;el.addEventListener('input',gerar);el.addEventListener('change',()=>{visib();gerar();});
+    w.appendChild(el);
+    const h=document.createElement('div');h.className='hint';h.id='h_'+f.id;h.textContent=f.hint||'';w.appendChild(h);
+    form.appendChild(w);
+  });
+  visib();gerar();
+  $('#checklist').innerHTML=(atual.check||[]).map(x=>`<li>${x}</li>`).join('');
+  $('#docNat').textContent=atual.code+' – '+atual.nome;
+}
+function val(id){const e=document.getElementById('f_'+id);return e?e.value.trim():'';}
+function visib(){
+  atual.fields.forEach(f=>{
+    if(f.g)return;const w=form.querySelector(`[data-id="${f.id}"]`);
+    if(f.showIf&&w){w.classList.toggle('hidden',!f.showIf.v.includes(val(f.showIf.f)));}
+    if(f.hintBy){const h=document.getElementById('h_'+f.id);h.textContent=f.hintBy[val('acion')]||'';}
+  });
+}
+// substitui {campo}: select → texto da opção (renderizado recursivamente); texto → valor
+function render(tpl){
+  let out=tpl;
+  for(let k=0;k<4;k++){
+    out=out.replace(/\[\[([^\[\]]*)\]\]/g,(m,inner)=>{
+      const ph=[...inner.matchAll(/\{(\w+)\}/g)].map(x=>x[1]);
+      if(ph.some(id=>fieldValue(id)==='')) return '';
+      return inner;
+    });
+    out=out.replace(/\{(\w+)\}/g,(m,id)=>fieldValue(id));
+  }
+  return out;
+}
+function fieldValue(id){
+  if(id.startsWith('not_')) return fieldValue(id.slice(4))==='' ? '\u200b' : '';
+  if(id.startsWith('has_')) return fieldValue(id.slice(4))!=='' ? '\u200b' : '';
+  const f=atual.fields.find(x=>x.id===id); if(!f) return '';
+  const w=form.querySelector(`[data-id="${id}"]`); if(w&&w.classList.contains('hidden')) return '';
+  const v=val(id);
+  if(f.type==='select'){const o=f.options.find(o=>o.v===v);if(!o||!o.t) return '';
+    let t=o.t; for(let k=0;k<3;k++){t=t.replace(/\[\[([^\[\]]*)\]\]/g,(m,inner)=>{const ph2=[...inner.matchAll(/\{(\w+)\}/g)].map(x=>x[1]);return ph2.some(p=>fieldValue(p)==='')?'':inner;});t=t.replace(/\{(\w+)\}/g,(m,p)=>fieldValue(p));}
+    return t.trim();}
+  if(v===''&&!f.opt&&f.type!=='select') return '['+f.label.split(' (')[0].toUpperCase()+']';
+  return v;
+}
+function limpar(s){
+  return s.replace(/\u200b/g,'').replace(/[ \t]+/g,' ').replace(/ ,/g,',').replace(/ \./g,'.').replace(/\.\./g,'.').replace(/ +\n/g,'\n').replace(/\n +/g,'\n').replace(/\n{3,}/g,'\n\n').replace(/([.!?]) ([a-záéíóúâêôãõç])/g,(m,a,b)=>a+' '+b).trim();
+}
+function gerar(){
+  if(!atual)return;
+  let s=render(atual.tpl); if(atual.post) s=atual.post(s); s=limpar(s);
+  // maiúscula após ponto final + espaço quando o trecho seguinte é bloco
+  s=s.replace(/\. ([a-z])/g,(m,c)=>'. '+c.toUpperCase());
+  saida.textContent=s;
+  const linhas=Math.ceil(s.length/95);
+  $('#contador').textContent=`≈ ${linhas} linhas · ${s.length} caracteres`+(linhas>12?' · acima do limite orientativo (verifique se é exceção)':'');
+  const falt=[];
+  if(!val('bo'))falt.push('número do BO');
+  if(!val('natureza'))falt.push('natureza literal do BO');
+  const temPessoa=(!atual.fields.some(f=>f.id==='abordado')||val('abordado'))&&(!atual.fields.some(f=>f.id==='condutor')||val('condutor'));
+  if(temPessoa&&atual.fields.some(f=>f.id==='desf')&&!val('desf')&&!val('desf2'))falt.push('decisão da autoridade sobre a pessoa');
+  if(atual.fields.some(f=>f.id==='bens')&&!val('bens')&&/MB-0[23]|MB-12|MB-16|MB-17/.test(atual.code))falt.push('destino de bens/material/veículo');
+  $('#avisos').innerHTML=falt.length?`<div class="aviso"><b>Lacunas obrigatórias (consultar a equipe antes de fechar):</b><ul>${falt.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'<div class="aviso ok"><b>Lacunas obrigatórias preenchidas.</b> Confira o checklist antes de copiar.</div>';
+}
+$('#copiar').addEventListener('click',async()=>{
+  const t=saida.textContent; const msg=$('#msg');
+  try{await navigator.clipboard.writeText(t);msg.textContent='Copiado para a área de transferência.';msg.className='ok';}
+  catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');msg.textContent='Copiado para a área de transferência.';msg.className='ok';}catch(e2){msg.textContent='Não foi possível copiar automaticamente: selecione o texto e use Ctrl+C.';msg.className='';}document.body.removeChild(ta);}
+  setTimeout(()=>{msg.textContent='';},3000);
+});
+$('#limpar').addEventListener('click',()=>{if(confirm('Apagar todos os campos?')){$('#relato').value='';montar();}});
+sel.addEventListener('change',montar);
+montar();
+</script>
+</body>
+</html>
